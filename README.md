@@ -2,12 +2,12 @@
 Application to turn your Raspberry Pi into a dedicated looping video playback device, good for art installations, information displays, or just playing cat videos all day.
 
 Some new features :
-    - displaying JPG and PNG images using only pygame.
-    - possibility to insert an image to be displayed between videos instead of black screen.
-    - if the playlist is composed of video files followed by images, the images will be displayed in the background to optimize loading and transition from one file to another. This also will reduce black screen time between playlist positions.
-    - possibility to limit the display of files by time intervals (date ranges or time intervals within a day)
-    - possibility to log feedback about playing process(timestamp, filename, palyerID, etc).
-    - navigation through the playlist (back , forward) using the left or right arrows on keyboard.
+    - displaying JPG and PNG images using only pygame.    
+    - possibility to insert an image to be displayed between videos instead of black screen.    
+    - if the playlist is composed of video files followed by images, the images will be displayed in the background to optimize loading and transition from one file to another. This also will reduce black screen time between playlist positions.    
+    - possibility to limit the display of files by time intervals (date ranges or time intervals within a day).
+    - possibility to log feedback about playing process(timestamp, filename, palyerID, etc).    
+    - navigation through the playlist (back , forward) using the left or right arrows on keyboard.    
     
     
 
@@ -16,6 +16,7 @@ Things still not working/tested:
     - I did not test if these changes work with Hello Video
     - Movies or images cannot be placed in different folders. For the moment content and playlist descriptor file need to stay in the same folder.
     - Without the file playlist.ini (playlist descriptor) nothing works.
+
 
 Format of playlist line:
 
