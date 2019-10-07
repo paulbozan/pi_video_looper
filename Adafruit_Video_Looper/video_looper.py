@@ -1,5 +1,5 @@
-# Copyright 2015 Adafruit Industries.
-# Author: Tony DiCola
+# Copyright 2019 ITS NEW VISION
+# Author: Paul Bozan
 # License: GNU GPLv2, see LICENSE.txt
 import ConfigParser
 import importlib
@@ -57,6 +57,7 @@ class VideoLooper(object):
         self._osd = self._config.getboolean('video_looper', 'osd')
         self._is_random = self._config.getboolean('video_looper', 'is_random')
         self._keyboard_control = self._config.getboolean('video_looper', 'keyboard_control')
+        self._allow_esc_exit = self._config.getboolean('video_looper', 'allow_esc_exit') 
         self._bk_image_path = self._config.get('video_looper', 'bk_image_path')
         self._content_path = self._config.get('directory', 'path')
         # Parse string of 3 comma separated values like "255, 255, 255" into
@@ -221,7 +222,7 @@ class VideoLooper(object):
 
     def _set_background_image(self,playlist):
         """Render background image
-           and load bg from disk if playlist index =0
+           and load bg from disk if playlist index =0 
         """
         try:
            self._screen.blit(self._bk, (0, 0))
@@ -257,7 +258,7 @@ class VideoLooper(object):
         message if the on screen display is enabled.
         """
         # Print message to console with number of movies in playlist.
-        message = 'Found {0} movie{1}.'.format(playlist.length(),
+        message = 'Found {0} movie{1}.'.format(playlist.length(), 
             's' if playlist.length() >= 2 else '')
         self._print(message)
         # Do nothing else if the OSD is turned off.
@@ -336,8 +337,6 @@ class VideoLooper(object):
             self._print("Play started: "+filename);
             # Place here your code to record play feedback
             # you can use self._pid to identify the player
-            
-        
 
     def run(self):
         """Main program loop.  Will never return!"""
@@ -446,9 +445,27 @@ class VideoLooper(object):
             if self._keyboard_control:
             	for event in pygame.event.get():
                    if event.type == pygame.KEYDOWN:
+                      self._print("Key="+repr(event.key))
                       # If pressed key is ESC quit program
-                      if event.key == pygame.K_ESCAPE:
+                      if event.key == pygame.K_ESCAPE and self._allow_esc_exit:
+                         self._print("Exit")
                          self.quit()
+                      if event.key == pygame.K_RIGHT: 
+                         self._print("Go forward")
+                         if isPictureDisplayed :
+                            isPictureDisplayed = False
+                         elif self._player.is_playing():
+                            self._player.stop(3)
+                      if event.key == pygame.K_LEFT: 
+                         self._blank_screen()
+                         prev = playlist.set_prev_index()
+                         self._print("Go back:"+repr(prev))
+                         isPrevKey = True
+                         if isPictureDisplayed :
+                            isPictureDisplayed = False
+                         elif self._player.is_playing():
+                            self._player.stop(3)
+                      break
 
             # omxplayer loop call feedback after each play
             if isMovieLoop and current_position_screen_time is not None :
@@ -467,27 +484,6 @@ class VideoLooper(object):
                 if elapsed_sec >= current_position_screen_time:
                    self._print("Picture time's up")
                    isPictureDisplayed = False
-
-           # Back or forward navigation throught playlist
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                   self._print("Key="+repr(event.key));
-                   if event.key == 275: #left arrow
-                      self._print("Go forward")
-                      if isPictureDisplayed :
-                         isPictureDisplayed = False
-                      elif self._player.is_playing():
-                         self._player.stop(3)
-                   if event.key == 276: #right arrow
-                      self._blank_screen()
-                      prev = playlist.set_prev_index()
-                      self._print("Go back:"+repr(prev))
-                      isPrevKey = True
-                      if isPictureDisplayed :
-                         isPictureDisplayed = False
-                      elif self._player.is_playing():
-                         self._player.stop(3)
-                break
 
 	    # Give the CPU some time to do other tasks.
             time.sleep(0.02)

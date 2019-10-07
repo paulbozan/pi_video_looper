@@ -1,5 +1,5 @@
-# Copyright 2015 Adafruit Industries.
-# Author: Tony DiCola
+# Copyright 2019 ITS NEW VISION
+# Author: Paul Bozan
 # License: GNU GPLv2, see LICENSE.txt
 import random
 import datetime
